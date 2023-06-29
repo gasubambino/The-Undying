@@ -19,10 +19,11 @@ public class arrow : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float angulo = rb.rotation * Mathf.Deg2Rad; // Converte o ângulo de graus para radianos
+        float angle = rb.rotation * Mathf.Deg2Rad; // Converte o ângulo de graus para radianos
 
-        Vector2 direcao = new Vector2(Mathf.Sin(angulo), Mathf.Cos(angulo));
+        Vector2 direction = new Vector2(-Mathf.Sin(angle), Mathf.Cos(angle));
+        direction.Normalize();
+        rb.velocity = direction*GameManager.arrowSpeed;
 
-        rb.AddForce(direcao * 2);
     }
 }
