@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using EZCameraShake;
+using Unity.VisualScripting;
 
 public class Gem : MonoBehaviour
 {
+    public GameObject missParticle;
+
     public GameObject gameSceneObject;
     public GameObject restartObject;
 
@@ -13,10 +17,12 @@ public class Gem : MonoBehaviour
     public GameObject arrowPrefab;
 
     public int misses = 0;
+
+    public float magn, rough, fadeIn, fadeOut;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(CreateArrow());
+        //StartCoroutine(CreateArrow());
     }
 
     // Update is called once per frame
@@ -24,8 +30,14 @@ public class Gem : MonoBehaviour
     {
         print("delay"+GameManager.delay);
         print("initial delay" + GameManager.initialDelay);
-        if (misses >2)
+        if (misses >6)
         {
+            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("arrow");
+            foreach (GameObject obj in objectsWithTag)
+            {
+                Destroy(obj);
+            }
+
             misses = 0;
             GameManager.score = 0;
             paddle.spdMultiplier = 0.007f;
@@ -35,10 +47,25 @@ public class Gem : MonoBehaviour
             restartObject.gameObject.SetActive(true);
             GameManager.gameStarted = false;
         }
-        if (GameManager.score > 34)
+        if (GameManager.score > 60 && GameManager.score < 111)
         {
-            paddle.spdMultiplier = 0.006f;
-            paddle.delayMultiplier = 0.007f;
+            paddle.spdMultiplier = 0.003f;
+            paddle.delayMultiplier = 0.003f;
+        }
+        if (GameManager.score > 110 && GameManager.score < 231)
+        {
+            paddle.spdMultiplier = 0.001f;
+            paddle.delayMultiplier = 0.001f;
+        }
+        if (GameManager.score > 230 && GameManager.score < 340)
+        {
+            paddle.spdMultiplier = 0.0006f;
+            paddle.delayMultiplier = 0.0005f;
+        }
+        if (GameManager.score > 339 && GameManager.score < 500)
+        {
+            paddle.spdMultiplier = 0.0002f;
+            paddle.delayMultiplier = 0.0002f;
         }
     }
     public IEnumerator CreateArrow()
@@ -56,6 +83,8 @@ public class Gem : MonoBehaviour
     {
         if (collision.CompareTag("arrow"))
         {
+            Instantiate(missParticle);
+            CameraShaker.Instance.ShakeOnce(magn, rough, fadeIn, fadeOut);
             misses++;
             Destroy(collision.gameObject);
         }

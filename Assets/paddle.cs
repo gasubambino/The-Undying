@@ -1,11 +1,18 @@
+using EZCameraShake;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using EZCameraShake;
 
 public class paddle : MonoBehaviour
 {
-    public static float spdMultiplier = 0.02f;
-    public static float delayMultiplier = 0.02f;
+    public float magn, rough, fadeIn, fadeOut;
+
+    public GameObject arrowDestroyParticle;
+
+    public static float spdMultiplier = 0.007f;
+    public static float delayMultiplier = 0.007f;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +28,8 @@ public class paddle : MonoBehaviour
     {
         if (collision.CompareTag("arrow"))
         {
+            Instantiate(arrowDestroyParticle,collision.transform.position,Quaternion.identity);
+            CameraShaker.Instance.ShakeOnce(magn, rough, fadeIn, fadeOut);
             Destroy(collision.gameObject);
             GameManager.delay -= delayMultiplier;
             GameManager.score++;

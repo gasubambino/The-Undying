@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public GameObject gameSceneObject;
     public GameObject restartObject;
     public GameObject startObject;
+    public GameObject startObject2;
+
 
     [SerializeField]public Gem gem;
 
@@ -38,12 +40,14 @@ public class GameManager : MonoBehaviour
     {
         if (!gameStarted)
         {
-            if (Input.anyKeyDown)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 delay = initialDelay;
                 gameSceneObject.gameObject.SetActive(true);
                 restartObject.gameObject.SetActive(false);
                 startObject.gameObject.SetActive(false);
+                startObject2.gameObject.SetActive(false);
+
                 gameStarted = true;
                 gem.StartCoroutine(gem.CreateArrow());
             }
