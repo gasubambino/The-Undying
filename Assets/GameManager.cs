@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public AudioSource music;
+    public AudioSource playSound;
+    //public AudioSource gameover;
+
     public GameObject highscoreObj;
     public GameObject scoreObj;
     public GameObject arrowPrefab;
@@ -14,6 +18,7 @@ public class GameManager : MonoBehaviour
     public GameObject startObject;
     public GameObject startObject2;
 
+    public static bool gameEnded = false;
 
     [SerializeField]public Gem gem;
 
@@ -29,6 +34,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        music.Play();
         delay = initialDelay;
         arrowSpeed = inicialArrowSpeed;
 
@@ -38,10 +44,13 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (!gameStarted)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                playSound.Play();
+                gameEnded = false;
                 delay = initialDelay;
                 gameSceneObject.gameObject.SetActive(true);
                 restartObject.gameObject.SetActive(false);
@@ -60,5 +69,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    private void FixedUpdate()
+    {
+        if (gameEnded)
+        {
+            music.pitch -= 0.01f;
+        }
+        else
+        {
+            music.pitch += 0.01f;
+        }
+        if (music.pitch <= 0)
+        {
+            music.pitch = 0;
+        }
+        if (music.pitch >= 1)
+        {
+            music.pitch = 1;
+        }
+    }
+
 }

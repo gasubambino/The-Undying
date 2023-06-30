@@ -7,6 +7,13 @@ using Unity.VisualScripting;
 
 public class Gem : MonoBehaviour
 {
+    public AudioSource damageSound;
+
+    public Animator animator;
+
+    public Sprite[] sprites;
+    public SpriteRenderer spriteRenderer;
+
     public GameObject missParticle;
 
     public GameObject gameSceneObject;
@@ -30,8 +37,9 @@ public class Gem : MonoBehaviour
     {
         print("delay"+GameManager.delay);
         print("initial delay" + GameManager.initialDelay);
-        if (misses >6)
+        if (misses >4)
         {
+            GameManager.gameEnded = true;
             GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("arrow");
             foreach (GameObject obj in objectsWithTag)
             {
@@ -67,6 +75,45 @@ public class Gem : MonoBehaviour
             paddle.spdMultiplier = 0.0002f;
             paddle.delayMultiplier = 0.0002f;
         }
+        if (GameManager.score > 500)
+        {
+            paddle.spdMultiplier = 0f;
+            paddle.delayMultiplier = 0f;
+        }
+        if (misses>3)
+        {
+            animator.SetBool("is1hp", true);
+        }
+        else
+        {
+            animator.SetBool("is1hp", false);
+        }
+        switch (misses)
+            {
+            case 0:
+                spriteRenderer.sprite = sprites[0];
+                break;
+            case 1:
+                spriteRenderer.sprite = sprites[1];
+                break;
+            case 2:
+                spriteRenderer.sprite = sprites[2];
+                break;
+            case 3:
+                spriteRenderer.sprite = sprites[3];
+                break;
+            case 4:
+                spriteRenderer.sprite = sprites[4];
+                break;
+            case 5:
+                spriteRenderer.sprite = sprites[5];
+                break;
+            case 6:
+                spriteRenderer.sprite = sprites[6];
+                break;
+
+        }
+
     }
     public IEnumerator CreateArrow()
     {
@@ -83,6 +130,7 @@ public class Gem : MonoBehaviour
     {
         if (collision.CompareTag("arrow"))
         {
+            damageSound.Play();
             Instantiate(missParticle);
             CameraShaker.Instance.ShakeOnce(magn, rough, fadeIn, fadeOut);
             misses++;

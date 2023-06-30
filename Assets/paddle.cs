@@ -7,6 +7,8 @@ using EZCameraShake;
 
 public class paddle : MonoBehaviour
 {
+    public AudioSource arrowDestroyedSound;
+
     public float magn, rough, fadeIn, fadeOut;
 
     public GameObject arrowDestroyParticle;
@@ -28,6 +30,7 @@ public class paddle : MonoBehaviour
     {
         if (collision.CompareTag("arrow"))
         {
+            arrowDestroyedSound.Play();
             Instantiate(arrowDestroyParticle,collision.transform.position,Quaternion.identity);
             CameraShaker.Instance.ShakeOnce(magn, rough, fadeIn, fadeOut);
             Destroy(collision.gameObject);
